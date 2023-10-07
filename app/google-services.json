@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "419756093204",
+    "project_id": "checkmate-3326f",
+    "storage_bucket": "checkmate-3326f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419756093204:android:33057d3cdd5e3e3a2edc01",
+        "android_client_info": {
+          "package_name": "com.geronymo.checkmate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt9kuSxPsw44JEW4Ji6YlTftR1Q_Z66TM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
