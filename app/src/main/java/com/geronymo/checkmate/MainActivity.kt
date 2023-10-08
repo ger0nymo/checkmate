@@ -9,8 +9,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.geronymo.checkmate.ui.screens.SigninScreen
-import com.geronymo.checkmate.ui.screens.SignupScreen
+import com.geronymo.checkmate.ui.screens.signin.SigninScreen
+import com.geronymo.checkmate.ui.screens.signup.SignupScreen
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
 
 class MainActivity : ComponentActivity() {
