@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.geronymo.checkmate.R
-import com.geronymo.checkmate.ui.components.CMAIconButton
 import com.geronymo.checkmate.ui.components.CMAOutlinedButton
 import com.geronymo.checkmate.ui.components.CMATextButton
 import com.geronymo.checkmate.ui.components.CMATextField
@@ -32,9 +31,11 @@ import com.geronymo.checkmate.ui.theme.CheckMateTheme
 
 @ExperimentalMaterial3Api
 @Composable
-fun SigninScreen(navController: NavController) {
+fun SignupScreen(navController: NavController) {
     var textInputEmail: String by remember { mutableStateOf("") }
+    var textInputUsername: String by remember { mutableStateOf("") }
     var textInputPassword: String by remember { mutableStateOf("") }
+    var textInputPasswordAgain: String by remember { mutableStateOf("") }
 
     CheckMateTheme() {
         Scaffold { innerPadding ->
@@ -48,7 +49,7 @@ fun SigninScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Image(
-                        painterResource(id = R.drawable.checklist),
+                        painterResource(id = R.drawable.checklist2),
                         contentDescription = "Todos",
                         modifier = Modifier
                             .fillMaxWidth(0.6f)
@@ -68,32 +69,34 @@ fun SigninScreen(navController: NavController) {
                         type = KeyboardType.Email,
                     )
                     CMATextField(
+                        value = textInputEmail,
+                        onValueChange = { str -> textInputUsername = str },
+                        label = "Username",
+                        type = KeyboardType.Text,
+                    )
+                    CMATextField(
                         value = textInputPassword,
                         onValueChange = { str -> textInputPassword = str },
                         label = "Password",
                         type = KeyboardType.Password,
                     )
+                    CMATextField(
+                        value = textInputPassword,
+                        onValueChange = { str -> textInputPasswordAgain = str },
+                        label = "Password again",
+                        type = KeyboardType.Password,
+                    )
                     Spacer(modifier = Modifier.height(14.dp)) // If I add padding for the "Sign in" button it will be cut off TODO: fix this
                     CMAOutlinedButton(
-                        onClick = {
-                            // TODO
-                        },
-                        text = "Sign in",
-                        modifier = Modifier
-                            .defaultMinSize(minHeight = 44.dp),
-
-                        )
-                    Spacer(modifier = Modifier.weight(1f))
-                    CMAIconButton(
-                        text = "Sign in via Google",
+                        text = "Sign up",
                         onClick = { /*TODO*/ },
-                        drawableIconId = R.drawable.google,
+                        modifier = Modifier
+                            .defaultMinSize(minHeight = 44.dp)
                     )
+                    Spacer(modifier = Modifier.weight(1f))
                     CMATextButton(
-                        text = "Don't have an account? Tap here",
-                        onClick = {
-                            navController.navigate("SignUp")
-                        },
+                        text = "Already have an account? Tap here",
+                        onClick = { navController.navigate("SignIn") },
                         modifier = Modifier.padding(top = 12.dp)
                     )
                 }

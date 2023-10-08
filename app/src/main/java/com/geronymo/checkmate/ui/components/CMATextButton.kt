@@ -17,11 +17,11 @@ fun CMATextButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifi
             containerColor = MaterialTheme.colorScheme.background,
             contentColor = MaterialTheme.colorScheme.onBackground
         ),
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .height(44.dp)
     ) {
-        Text(text = "Don't have an account yet? Tap here")
+        Text(text = text)
     }
 }
