@@ -1,4 +1,4 @@
-package com.geronymo.checkmate.ui.screens.signup
+package com.geronymo.checkmate.data.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

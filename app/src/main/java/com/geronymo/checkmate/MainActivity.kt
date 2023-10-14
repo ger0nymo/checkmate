@@ -9,8 +9,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.geronymo.checkmate.ui.screens.signin.SigninScreen
-import com.geronymo.checkmate.ui.screens.signup.SignupScreen
+import com.geronymo.checkmate.ui.screens.SigninScreen
+import com.geronymo.checkmate.ui.screens.SignupScreen
+import com.geronymo.checkmate.ui.screens.SplashScreen
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "SignIn"
+                    startDestination = "Splash"
                 ) {
                     composable(
                         route = "SignIn",
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
                         }
                     ) {
-                        SigninScreen(navController)
+                        SigninScreen(navController, this@MainActivity)
                     }
                     composable(route = "SignUp", enterTransition = {
                         slideIntoContainer(
@@ -43,6 +44,9 @@ class MainActivity : ComponentActivity() {
                         )
                     }) {
                         SignupScreen(navController)
+                    }
+                    composable(route = "Splash") {
+                        SplashScreen()
                     }
                 }
             }

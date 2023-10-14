@@ -1,4 +1,4 @@
-package com.geronymo.checkmate.ui.screens.signup
+package com.geronymo.checkmate.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.geronymo.checkmate.R
+import com.geronymo.checkmate.data.viewmodels.SignUpViewModel
 import com.geronymo.checkmate.ui.components.CMAOutlinedButton
 import com.geronymo.checkmate.ui.components.CMATextButton
 import com.geronymo.checkmate.ui.components.CMATextField

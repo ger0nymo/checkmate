@@ -12,7 +12,20 @@
           "package_name": "com.geronymo.checkmate"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "419756093204-g2025hp2gvthht9goer0v9bkrak778j2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.geronymo.checkmate",
+            "certificate_hash": "74562a1098d9328ff96f134a468e5a6e23acf815"
+          }
+        },
+        {
+          "client_id": "419756093204-i3b2j103i5ih2tvakkd91pmmv66gc1kp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBt9kuSxPsw44JEW4Ji6YlTftR1Q_Z66TM"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419756093204-i3b2j103i5ih2tvakkd91pmmv66gc1kp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

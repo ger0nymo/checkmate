@@ -1,5 +1,13 @@
-package com.geronymo.checkmate.ui.screens.signin
+package com.geronymo.checkmate.ui.screens
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +22,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,17 +33,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.geronymo.checkmate.MainActivity
 import com.geronymo.checkmate.R
+import com.geronymo.checkmate.data.viewmodels.SignInViewModel
+import com.geronymo.checkmate.data.viewmodels.UserViewModel
 import com.geronymo.checkmate.ui.components.CMAIconButton
 import com.geronymo.checkmate.ui.components.CMAOutlinedButton
 import com.geronymo.checkmate.ui.components.CMATextButton
 import com.geronymo.checkmate.ui.components.CMATextField
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @ExperimentalMaterial3Api
 @Composable
-fun SigninScreen(navController: NavController) {
+fun SigninScreen(navController: NavController, activity: MainActivity) {
     val viewModel: SignInViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
 
     val emailState = viewModel.emailState.collectAsState()
     val passwordState = viewModel.passwordState.collectAsState()
@@ -39,8 +58,19 @@ fun SigninScreen(navController: NavController) {
     val emailValidationState = viewModel.emailValidationState.collectAsState()
     val passwordValidationState = viewModel.passwordValidationState.collectAsState()
 
+    val userState = userViewModel.user.collectAsState()
+
+    val googleSignInClient = viewModel.getGoogleSignInClient(activity)
+    val startForResult =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            viewModel.signInWithGoogle(result) { navController.navigate("SignUp") }
+        }
+
+    var isLoading: Boolean by remember { mutableStateOf(false) }
+
     CheckMateTheme() {
-        Scaffold { innerPadding ->
+        Scaffold(
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding),
@@ -83,22 +113,35 @@ fun SigninScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(14.dp)) // If I add padding for the "Sign in" button it will be cut off TODO: fix this
                     CMAOutlinedButton(
                         onClick = {
-                            viewModel.signIn()
+                            viewModel.signInWithEmailAndPassword()
                         },
                         text = "Sign in",
                         modifier = Modifier
                             .defaultMinSize(minHeight = 44.dp),
-
                         )
                     Spacer(modifier = Modifier.weight(1f))
                     CMAIconButton(
                         text = "Sign in via Google",
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            if (userState.value == null) {
+                                isLoading = true
+                                Log.d("SignInScreen", "RUNS")
+                                val signInIntent = googleSignInClient.signInIntent
+                                startForResult.launch(signInIntent)
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    isLoading = false
+                                }, 5000)
+                            }
+
+                        },
+                        isLoading = isLoading,
                         drawableIconId = R.drawable.google,
                     )
                     CMATextButton(
                         text = "Don't have an account? Tap here",
                         onClick = {
+                            val auth: FirebaseAuth = Firebase.auth
+                            auth.signOut()
                             navController.navigate("SignUp")
                         },
                         modifier = Modifier.padding(top = 12.dp)

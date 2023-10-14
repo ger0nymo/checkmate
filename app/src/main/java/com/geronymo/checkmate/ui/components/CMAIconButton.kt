@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -24,14 +25,18 @@ fun CMAIconButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    drawableIconId: Int
+    drawableIconId: Int,
+    isLoading: Boolean = false
 ) {
     OutlinedButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
-        onClick = onClick,
+        onClick = {
+            if (!isLoading) onClick()
+            else { }
+        },
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .height(44.dp)
@@ -41,13 +46,20 @@ fun CMAIconButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Image(
-                painter = painterResource(id = drawableIconId),
-                contentDescription = "Icon",
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = text)
+            if (!isLoading) {
+                Image(
+                    painter = painterResource(id = drawableIconId),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = text)
+            } else {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    strokeWidth = 2.dp
+                )
+            }
         }
     }
 }
