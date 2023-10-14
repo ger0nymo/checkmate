@@ -56,12 +56,12 @@ fun SignupScreen(navController: NavController) {
                 ) {
                     Image(
                         painterResource(
-                            id = R.drawable.checklist2
+                            id = R.drawable.signup
                         ),
                         contentDescription = "Todos",
                         modifier = Modifier
-                            .fillMaxWidth(0.55f)
-                            .padding(top = 70.dp)
+                            .fillMaxWidth(0.4f)
+                            .padding(top = 50.dp)
                     )
                 }
                 Column(

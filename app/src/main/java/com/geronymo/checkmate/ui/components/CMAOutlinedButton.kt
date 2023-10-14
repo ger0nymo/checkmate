@@ -11,12 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CMAOutlinedButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun CMAOutlinedButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
     OutlinedButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
         ),
+        enabled = enabled,
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth(0.8f)

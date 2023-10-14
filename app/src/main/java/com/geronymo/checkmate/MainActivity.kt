@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.geronymo.checkmate.ui.screens.SigninScreen
 import com.geronymo.checkmate.ui.screens.SignupScreen
 import com.geronymo.checkmate.ui.screens.SplashScreen
+import com.geronymo.checkmate.ui.screens.VerifyEmailSceen
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "Splash"
+                    startDestination = "VerifyEmail"
                 ) {
                     composable(
                         route = "SignIn",
@@ -47,6 +48,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = "Splash") {
                         SplashScreen()
+                    }
+                    composable(route = "VerifyEmail") {
+                        VerifyEmailSceen()
                     }
                 }
             }

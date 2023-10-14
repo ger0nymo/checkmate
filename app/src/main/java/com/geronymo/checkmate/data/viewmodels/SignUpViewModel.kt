@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geronymo.checkmate.utils.InputValidator
 import com.geronymo.checkmate.utils.ValidationResult
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -65,11 +66,37 @@ class SignUpViewModel : ViewModel() {
 
         validate()
 
+        val canSignUp = emailValidationState.value.isValid &&
+                usernameValidationState.value.isValid &&
+                passwordValidationState.value.isValid &&
+                confirmPasswordValidationState.value.isValid
+
+
         viewModelScope.launch {
-            Log.d(
-                "SignUpViewModel",
-                "Email: $email, Username: $username, Password: $password, Confirm Password: $confirmPassword"
-            )
+            if (canSignUp) {
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener() { task ->
+                        if (task.isSuccessful) {
+                            Log.d("SignUpViewModel", "Email: $email, Password: $password")
+                            val user = FirebaseAuth.getInstance().currentUser
+                            user?.sendEmailVerification()
+                                ?.addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Log.d(
+                                            "SignUpViewModel",
+                                            "Email sent to ${user.email}"
+                                        )
+                                    }
+                                }
+                        } else {
+                            Log.w("SignUpViewModel", "createUserWithEmail:failure", task.exception)
+                        }
+                    }
+                Log.d(
+                    "SignUpViewModel",
+                    "Email: $email, Username: $username, Password: $password, Confirm Password: $confirmPassword"
+                )
+            }
         }
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geronymo.checkmate.R
-import com.geronymo.checkmate.data.models.User
 import com.geronymo.checkmate.utils.InputValidator
 import com.geronymo.checkmate.utils.ValidationResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -63,27 +62,30 @@ class SignInViewModel() : ViewModel() {
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                 val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
-                     try {
-                        val account = task.getResult(ApiException::class.java)
-                        val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-                        FirebaseAuth.getInstance().signInWithCredential(credential)
-                            .addOnCompleteListener { task ->
-                                if  (task.isSuccessful) {
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        navigateForward()
-                                    }
-
-                                } else {
-                                    Log.w("LOGIN_RESULT", "signInWithCredential:failure", task.exception)
+                val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+                    FirebaseAuth.getInstance().signInWithCredential(credential)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    navigateForward()
                                 }
+
+                            } else {
+                                Log.w(
+                                    "LOGIN_RESULT",
+                                    "signInWithCredential:failure",
+                                    task.exception
+                                )
                             }
-                    } catch (e: ApiException) {
-                        Log.w(TAG, "Google sign in failed", e)
-                    }
+                        }
+                } catch (e: ApiException) {
+                    Log.w(TAG, "Google sign in failed", e)
                 }
             }
-
+        }
     }
 
     @Composable

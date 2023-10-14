@@ -1,7 +1,5 @@
 package com.geronymo.checkmate.ui.screens
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -81,11 +79,11 @@ fun SigninScreen(navController: NavController, activity: MainActivity) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Image(
-                        painterResource(id = R.drawable.checklist),
+                        painterResource(id = R.drawable.signin),
                         contentDescription = "Todos",
                         modifier = Modifier
-                            .fillMaxWidth(0.55f)
-                            .padding(top = 70.dp)
+                            .fillMaxWidth(0.45f)
+                            .padding(top = 50.dp)
                     )
                 }
                 Column(
@@ -118,7 +116,7 @@ fun SigninScreen(navController: NavController, activity: MainActivity) {
                         text = "Sign in",
                         modifier = Modifier
                             .defaultMinSize(minHeight = 44.dp),
-                        )
+                    )
                     Spacer(modifier = Modifier.weight(1f))
                     CMAIconButton(
                         text = "Sign in via Google",
