@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.geronymo.checkmate.data.models.User
+import com.geronymo.checkmate.data.repositories.UserRepository
 import com.geronymo.checkmate.utils.InputValidator
 import com.geronymo.checkmate.utils.ValidationResult
 import com.google.firebase.auth.FirebaseAuth
@@ -83,6 +85,12 @@ class SignUpViewModel : ViewModel() {
                             user?.sendEmailVerification()
                                 ?.addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
+                                        val databaseUser = User(
+                                            uid = user.uid,
+                                            email = email,
+                                            username = username,
+                                        )
+                                        UserRepository.signUpUserIntoDatabase(databaseUser)
                                         navController.navigate("VerifyEmail")
                                     }
                                 }
