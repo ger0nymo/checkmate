@@ -105,7 +105,7 @@ fun SignupScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(14.dp)) // If I add padding for the "Sign up" button it will be cut off TODO: fix this
                     CMAOutlinedButton(
                         text = "Sign up",
-                        onClick = { viewModel.signUp() },
+                        onClick = { viewModel.signUp(navController) },
                         modifier = Modifier
                             .defaultMinSize(minHeight = 44.dp)
                     )

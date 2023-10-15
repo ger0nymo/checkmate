@@ -1,5 +1,6 @@
 package com.geronymo.checkmate.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,11 +28,29 @@ import androidx.compose.ui.unit.dp
 import com.geronymo.checkmate.R
 import com.geronymo.checkmate.ui.components.CMAOutlinedButton
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 
 @ExperimentalMaterial3Api
 @Preview
 @Composable
 fun VerifyEmailSceen() {
+    var enabled: Boolean by remember { mutableStateOf(true) }
+
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+    var isVerified by remember { mutableStateOf(currentUser?.isEmailVerified ?: false) }
+
+    // This effect runs when the screen is first composed and every time isVerified changes
+    LaunchedEffect(isVerified) {
+        while (!isVerified) {
+            delay(2000)
+            currentUser?.reload()
+            isVerified = currentUser?.isEmailVerified ?: false
+            Log.d("VerifyEmailScreen", "isVerified: $isVerified")
+        }
+    }
+
     CheckMateTheme() {
         Scaffold() { innerPadding ->
             Column(
@@ -89,9 +113,9 @@ fun VerifyEmailSceen() {
                         .padding(bottom = 10.dp)
                 ) {
                     CMAOutlinedButton(
-                        text = "Resend email (0:57)",
+                        text = "Resend email",
                         onClick = { /*TODO*/ },
-                        enabled = false,
+                        enabled = true,
                     )
                 }
             }

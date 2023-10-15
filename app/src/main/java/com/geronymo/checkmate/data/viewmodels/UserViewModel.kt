@@ -1,6 +1,5 @@
 package com.geronymo.checkmate.data.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.geronymo.checkmate.data.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -8,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class UserViewModel() : ViewModel() {
-    val _userState = MutableStateFlow<User?>(null)
+    private val _userState = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _userState
 
     init {

@@ -10,15 +10,29 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.geronymo.checkmate.R
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 
 @ExperimentalMaterial3Api
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navController: NavController) {
+    LaunchedEffect(Unit) {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        delay(800)
+        if (firebaseUser == null) navController.navigate("SignIn")
+        else {
+            if (!firebaseUser.isEmailVerified) navController.navigate("VerifyEmail")
+
+        }
+    }
+
     CheckMateTheme() {
         Scaffold() { innerPadding ->
             Column(
@@ -43,7 +57,6 @@ fun SplashScreen() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     CircularProgressIndicator(modifier = Modifier.padding(top = 20.dp))
-
                 }
             }
         }

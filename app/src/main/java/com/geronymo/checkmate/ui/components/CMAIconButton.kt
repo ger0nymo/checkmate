@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -26,7 +25,7 @@ fun CMAIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     drawableIconId: Int,
-    isLoading: Boolean = false
+    enabled: Boolean = true
 ) {
     OutlinedButton(
         colors = ButtonDefaults.buttonColors(
@@ -34,8 +33,9 @@ fun CMAIconButton(
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
         onClick = {
-            if (!isLoading) onClick()
-            else { }
+            if (enabled) onClick()
+            else {
+            }
         },
         modifier = Modifier
             .fillMaxWidth(0.8f)
@@ -46,7 +46,7 @@ fun CMAIconButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            if (!isLoading) {
+            if (enabled) {
                 Image(
                     painter = painterResource(id = drawableIconId),
                     contentDescription = "Icon",

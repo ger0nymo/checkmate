@@ -61,10 +61,11 @@ fun SigninScreen(navController: NavController, activity: MainActivity) {
     val googleSignInClient = viewModel.getGoogleSignInClient(activity)
     val startForResult =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            viewModel.signInWithGoogle(result) { navController.navigate("SignUp") }
+            viewModel.signInWithGoogle(result, navController)
         }
 
-    var isLoading: Boolean by remember { mutableStateOf(false) }
+    var googleSignInLoading: Boolean by remember { mutableStateOf(false) }
+    var emailSignInLoading: Boolean by remember { mutableStateOf(false) }
 
     CheckMateTheme() {
         Scaffold(
@@ -111,8 +112,17 @@ fun SigninScreen(navController: NavController, activity: MainActivity) {
                     Spacer(modifier = Modifier.height(14.dp)) // If I add padding for the "Sign in" button it will be cut off TODO: fix this
                     CMAOutlinedButton(
                         onClick = {
-                            viewModel.signInWithEmailAndPassword()
+                            viewModel.signInWithEmailAndPassword(navController)
+                            val canSignIn =
+                                passwordValidationState.value.isValid && emailValidationState.value.isValid
+                            if (canSignIn) {
+                                emailSignInLoading = true
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    emailSignInLoading = false
+                                }, 3000)
+                            }
                         },
+                        enabled = !emailSignInLoading,
                         text = "Sign in",
                         modifier = Modifier
                             .defaultMinSize(minHeight = 44.dp),
@@ -122,17 +132,16 @@ fun SigninScreen(navController: NavController, activity: MainActivity) {
                         text = "Sign in via Google",
                         onClick = {
                             if (userState.value == null) {
-                                isLoading = true
+                                googleSignInLoading = true
                                 Log.d("SignInScreen", "RUNS")
                                 val signInIntent = googleSignInClient.signInIntent
                                 startForResult.launch(signInIntent)
                                 Handler(Looper.getMainLooper()).postDelayed({
-                                    isLoading = false
+                                    googleSignInLoading = false
                                 }, 5000)
                             }
-
                         },
-                        isLoading = isLoading,
+                        enabled = !googleSignInLoading,
                         drawableIconId = R.drawable.google,
                     )
                     CMATextButton(

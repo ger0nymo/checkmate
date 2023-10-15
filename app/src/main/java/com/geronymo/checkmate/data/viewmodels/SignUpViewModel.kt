@@ -3,6 +3,7 @@ package com.geronymo.checkmate.data.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.geronymo.checkmate.utils.InputValidator
 import com.geronymo.checkmate.utils.ValidationResult
 import com.google.firebase.auth.FirebaseAuth
@@ -58,7 +59,7 @@ class SignUpViewModel : ViewModel() {
         }
     }
 
-    fun signUp() {
+    fun signUp(navController: NavController) {
         val email = emailState.value
         val password = passwordState.value
         val username = usernameState.value
@@ -82,10 +83,7 @@ class SignUpViewModel : ViewModel() {
                             user?.sendEmailVerification()
                                 ?.addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
-                                        Log.d(
-                                            "SignUpViewModel",
-                                            "Email sent to ${user.email}"
-                                        )
+                                        navController.navigate("VerifyEmail")
                                     }
                                 }
                         } else {

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.geronymo.checkmate.R
 import com.geronymo.checkmate.utils.InputValidator
 import com.geronymo.checkmate.utils.ValidationResult
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class SignInViewModel() : ViewModel() {
     private val _emailState = MutableStateFlow("")
@@ -47,18 +49,40 @@ class SignInViewModel() : ViewModel() {
         _passwordValidationState.value = InputValidator.validatePassword(passwordState.value)
     }
 
-    fun signInWithEmailAndPassword() {
+    fun signInWithEmailAndPassword(navController: NavController) {
         val email = emailState.value
         val password = passwordState.value
 
         validate()
 
+        val canSignIn = emailValidationState.value.isValid && passwordValidationState.value.isValid
+
         viewModelScope.launch {
-            Log.d("SignInViewModel", "Email: $email, Password: $password")
+            if (canSignIn) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "signInWithEmail:success")
+                            navController.navigate("Splash")
+                        } else {
+                            _passwordValidationState.value =
+                                ValidationResult(
+                                    false,
+                                    if (task.exception.toString().lowercase(Locale.getDefault())
+                                            .contains("credentials")
+                                    ) {
+                                        "No account found with the given credentials"
+                                    } else {
+                                        "Something went wrong"
+                                    }
+                                )
+                        }
+                    }
+            }
         }
     }
 
-    fun signInWithGoogle(result: ActivityResult, navigateForward: () -> Unit) {
+    fun signInWithGoogle(result: ActivityResult, navController: NavController) {
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
@@ -70,7 +94,7 @@ class SignInViewModel() : ViewModel() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    navigateForward()
+                                    navController.navigate("Splash")
                                 }
 
                             } else {
