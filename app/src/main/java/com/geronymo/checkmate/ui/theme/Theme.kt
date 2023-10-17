@@ -36,6 +36,8 @@ val LightColors = lightColorScheme(
     inverseSurface = DarkGreenGray20,
     inverseOnSurface = DarkGreenGray95,
     outline = GreenGray50,
+    surfaceTint = DarkGreenGray95,
+    scrim = Color(0xFFFAFDF8)
 )
 
 /**
@@ -68,6 +70,8 @@ val DarkColors = darkColorScheme(
     inverseSurface = DarkGreenGray90,
     inverseOnSurface = DarkGreenGray10,
     outline = GreenGray60,
+    surfaceTint = Color.Black, // HomeScreen background
+    scrim = Color(0XFF1A1C19)// BottomNavBar background
 )
 
 @Composable

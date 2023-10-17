@@ -63,7 +63,9 @@ class SignInViewModel() : ViewModel() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Log.d(TAG, "signInWithEmail:success")
-                            navController.navigate("Splash")
+                            navController.navigate("Splash") {
+                                popUpTo(navController.graph.id) { inclusive = true }
+                            }
                         } else {
                             _passwordValidationState.value =
                                 ValidationResult(
@@ -94,9 +96,10 @@ class SignInViewModel() : ViewModel() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    navController.navigate("Splash")
+                                    navController.navigate("Splash") {
+                                        popUpTo(navController.graph.id) { inclusive = true }
+                                    }
                                 }
-
                             } else {
                                 Log.w(
                                     "LOGIN_RESULT",

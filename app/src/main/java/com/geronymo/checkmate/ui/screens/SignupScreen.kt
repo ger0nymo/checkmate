@@ -112,7 +112,7 @@ fun SignupScreen(navController: NavController) {
                     Spacer(modifier = Modifier.weight(1f))
                     CMATextButton(
                         text = "Already have an account? Tap here",
-                        onClick = { navController.navigate("SignIn") },
+                        onClick = { navController.navigate("SignIn")},
                         modifier = Modifier.padding(top = 12.dp)
                     )
                 }

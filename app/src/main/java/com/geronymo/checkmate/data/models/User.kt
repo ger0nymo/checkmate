@@ -5,7 +5,7 @@ data class User(
     val email: String,
     val username: String,
     val profilePictureUrl: String = "",
-    val todos: List<Todo> = emptyList(),
+    val todos: List<Post> = emptyList(),
     val followers: List<User> = emptyList(),
     val following: List<User> = emptyList()
 ) {

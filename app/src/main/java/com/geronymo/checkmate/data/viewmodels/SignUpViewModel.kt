@@ -91,7 +91,9 @@ class SignUpViewModel : ViewModel() {
                                             username = username,
                                         )
                                         UserRepository.signUpUserIntoDatabase(databaseUser)
-                                        navController.navigate("VerifyEmail")
+                                        navController.navigate("VerifyEmail") {
+                                            popUpTo(navController.graph.id) { inclusive = true }
+                                        }
                                     }
                                 }
                         } else {

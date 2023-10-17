@@ -2,7 +2,7 @@ package com.geronymo.checkmate.data.models
 
 import com.geronymo.checkmate.utils.enums.TodoPrivacyLevelEnum
 
-data class Todo(
+data class Post(
     val title: String,
     val description: String,
     val uid: String,

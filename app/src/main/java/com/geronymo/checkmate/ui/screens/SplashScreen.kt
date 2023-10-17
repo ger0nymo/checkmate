@@ -1,5 +1,6 @@
 package com.geronymo.checkmate.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,11 +26,19 @@ import kotlinx.coroutines.delay
 fun SplashScreen(navController: NavController) {
     LaunchedEffect(Unit) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-        delay(800)
-        if (firebaseUser == null) navController.navigate("SignIn")
-        else {
-            if (!firebaseUser.isEmailVerified) navController.navigate("VerifyEmail")
-
+        delay(800) // Simulate a little loading time
+        if (firebaseUser == null) {
+            navController.navigate("SignIn") {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
+        }  else {
+            if (!firebaseUser.isEmailVerified) {
+                navController.navigate("VerifyEmail") {
+                    popUpTo(navController.graph.id) { inclusive = true }
+                }
+            } else navController.navigate("Home") {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
         }
     }
 

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.geronymo.checkmate.R
 import com.geronymo.checkmate.ui.components.CMAOutlinedButton
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
@@ -34,20 +35,17 @@ import kotlinx.coroutines.delay
 @ExperimentalMaterial3Api
 @Preview
 @Composable
-fun VerifyEmailSceen() {
-    var enabled: Boolean by remember { mutableStateOf(true) }
-
+fun VerifyEmailSceen(navController: NavController) {
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
+
     var isVerified by remember { mutableStateOf(currentUser?.isEmailVerified ?: false) }
 
-    // This effect runs when the screen is first composed and every time isVerified changes
     LaunchedEffect(isVerified) {
         while (!isVerified) {
-            delay(2000)
+            delay(1000)
             currentUser?.reload()
-            isVerified = currentUser?.isEmailVerified ?: false
-            Log.d("VerifyEmailScreen", "isVerified: $isVerified")
+            if (currentUser?.isEmailVerified == true) navController.navigate("Home")
         }
     }
 
