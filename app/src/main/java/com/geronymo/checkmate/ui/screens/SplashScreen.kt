@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ fun SplashScreen(navController: NavController) {
 
     LaunchedEffect(Unit) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
+        Log.d("SplashScreen", "firebaseUser: $firebaseUser")
         if (firebaseUser == null) {
             navController.navigate("SignIn") {
                 popUpTo(navController.graph.id) { inclusive = true }
@@ -40,18 +42,24 @@ fun SplashScreen(navController: NavController) {
                 }
             }
         }
-        userViewModel.getUser()
-        userViewModel.user.collect { user ->
-            if (user != null) {
-                if (user.username?.isEmpty() == true) {
-                    navController.navigate("SetUsername") {
-                        popUpTo(navController.graph.id) { inclusive = true }
-                    }
-                } else {
-                    navController.navigate("Home") {
-                        popUpTo(navController.graph.id) { inclusive = true }
+        val userExists = userViewModel.getUser()
+        if (userExists) {
+            userViewModel.user.collect { user ->
+                if (user != null) {
+                    if (user.username?.isEmpty() == true) {
+                        navController.navigate("SetUsername") {
+                            popUpTo(navController.graph.id) { inclusive = true }
+                        }
+                    } else {
+                        navController.navigate("Home") {
+                            popUpTo(navController.graph.id) { inclusive = true }
+                        }
                     }
                 }
+            }
+        } else {
+            navController.navigate("SignIn") {
+                popUpTo(navController.graph.id) { inclusive = true }
             }
         }
 

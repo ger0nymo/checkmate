@@ -14,13 +14,14 @@ class UserViewModel() : ViewModel() {
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user
 
-    suspend fun getUser() {
+    suspend fun getUser(): Boolean {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         if (firebaseUser != null) {
-            viewModelScope.launch {
-                val user = UserRepository.getUserFromDatabase(firebaseUser.uid)
-                _user.value = user
-            }
+            val user = UserRepository.getUserFromDatabase(firebaseUser.uid)
+            _user.value = user
+            return user != null
         }
+        return false
     }
+
 }

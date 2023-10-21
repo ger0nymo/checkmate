@@ -38,7 +38,7 @@ class SignInViewModel() : ViewModel() {
     val emailValidationState: StateFlow<ValidationResult> = _emailValidationState
     val passwordValidationState: StateFlow<ValidationResult> = _passwordValidationState
 
-    val userViewModel = UserViewModel()
+    private val userViewModel = UserViewModel()
 
     fun setEmail(email: String) {
         _emailState.value = email
@@ -102,25 +102,23 @@ class SignInViewModel() : ViewModel() {
                     FirebaseAuth.getInstance().signInWithCredential(credential)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    userViewModel.getUser()
-                                    userViewModel.user.collect { user ->
-                                        if (user == null) { // User doesn't exist in database yet
-                                            val firebaseUser = task.result.user!!
-                                            val newDatabaseUser = User(
-                                                uid = firebaseUser.uid,
-                                                email = firebaseUser.email,
-                                                profilePictureUrl = firebaseUser.photoUrl.toString(),
-                                                username = "",
+                                viewModelScope.launch {
+                                    val userExists = userViewModel.getUser()
+                                    Log.d("SignInViewModel", "userExists: $userExists")
+                                    if (!userExists) {
+                                        val firebaseUser = task.result.user!!
+                                        val newDatabaseUser = User(
+                                            uid = firebaseUser.uid,
+                                            email = firebaseUser.email,
+                                            profilePictureUrl = firebaseUser.photoUrl.toString(),
+                                            username = "",
 
                                             )
-                                            UserRepository.signUpUserIntoDatabase(newDatabaseUser)
-                                        }
-                                        navController.navigate("Splash") {
-                                            popUpTo(navController.graph.id) { inclusive = true }
-                                        }
+                                        UserRepository.signUpUserIntoDatabase(newDatabaseUser)
                                     }
-
+                                    navController.navigate("Splash") {
+                                        popUpTo(navController.graph.id) { inclusive = true }
+                                    }
                                 }
                             } else {
                                 Log.w(
