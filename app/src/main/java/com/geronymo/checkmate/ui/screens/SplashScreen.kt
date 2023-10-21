@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.geronymo.checkmate.R
+import com.geronymo.checkmate.data.viewmodels.UserViewModel
 import com.geronymo.checkmate.ui.theme.CheckMateTheme
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -24,9 +25,10 @@ import kotlinx.coroutines.delay
 @ExperimentalMaterial3Api
 @Composable
 fun SplashScreen(navController: NavController) {
+    val userViewModel = UserViewModel()
+
     LaunchedEffect(Unit) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-        delay(800) // Simulate a little loading time
         if (firebaseUser == null) {
             navController.navigate("SignIn") {
                 popUpTo(navController.graph.id) { inclusive = true }
@@ -36,10 +38,23 @@ fun SplashScreen(navController: NavController) {
                 navController.navigate("VerifyEmail") {
                     popUpTo(navController.graph.id) { inclusive = true }
                 }
-            } else navController.navigate("Home") {
-                popUpTo(navController.graph.id) { inclusive = true }
             }
         }
+        userViewModel.getUser()
+        userViewModel.user.collect { user ->
+            if (user != null) {
+                if (user.username?.isEmpty() == true) {
+                    navController.navigate("SetUsername") {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                    }
+                } else {
+                    navController.navigate("Home") {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                    }
+                }
+            }
+        }
+
     }
 
     CheckMateTheme() {

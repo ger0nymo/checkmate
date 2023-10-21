@@ -8,7 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.geronymo.checkmate.MainActivity
-import com.geronymo.checkmate.ui.screens.HomeScreen
+import com.geronymo.checkmate.data.viewmodels.UserViewModel
+import com.geronymo.checkmate.ui.screens.SetUsernameScreen
+import com.geronymo.checkmate.ui.screens.home.HomeScreen
 import com.geronymo.checkmate.ui.screens.SigninScreen
 import com.geronymo.checkmate.ui.screens.SignupScreen
 import com.geronymo.checkmate.ui.screens.SplashScreen
@@ -67,6 +69,15 @@ fun CMAAnimatedNavHost(navController: NavHostController, activity: MainActivity)
 
         }) {
             HomeScreen()
+        }
+        composable(route = "SetUsername", enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                tween(500)
+            )
+
+        }) {
+            SetUsernameScreen(navController)
         }
     }
 }

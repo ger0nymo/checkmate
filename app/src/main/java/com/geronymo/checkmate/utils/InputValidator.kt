@@ -26,7 +26,7 @@ object InputValidator {
         } else {
             ValidationResult(
                 false,
-                "Invalid username"
+                "Username can not contain special characters other than underscore (_) and dot (.)."
             )
         }
     }

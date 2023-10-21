@@ -18,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.UiComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.geronymo.checkmate.ui.screens.HomeScreen
-import com.geronymo.checkmate.ui.screens.TestScreen
 
 @Composable
 @UiComposable

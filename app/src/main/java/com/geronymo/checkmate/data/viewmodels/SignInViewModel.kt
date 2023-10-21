@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.geronymo.checkmate.R
+import com.geronymo.checkmate.data.models.User
+import com.geronymo.checkmate.data.repositories.UserRepository
 import com.geronymo.checkmate.utils.InputValidator
 import com.geronymo.checkmate.utils.ValidationResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -35,6 +37,8 @@ class SignInViewModel() : ViewModel() {
     val passwordState: StateFlow<String> = _passwordState
     val emailValidationState: StateFlow<ValidationResult> = _emailValidationState
     val passwordValidationState: StateFlow<ValidationResult> = _passwordValidationState
+
+    val userViewModel = UserViewModel()
 
     fun setEmail(email: String) {
         _emailState.value = email
@@ -63,6 +67,9 @@ class SignInViewModel() : ViewModel() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Log.d(TAG, "signInWithEmail:success")
+
+
+
                             navController.navigate("Splash") {
                                 popUpTo(navController.graph.id) { inclusive = true }
                             }
@@ -96,9 +103,24 @@ class SignInViewModel() : ViewModel() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    navController.navigate("Splash") {
-                                        popUpTo(navController.graph.id) { inclusive = true }
+                                    userViewModel.getUser()
+                                    userViewModel.user.collect { user ->
+                                        if (user == null) { // User doesn't exist in database yet
+                                            val firebaseUser = task.result.user!!
+                                            val newDatabaseUser = User(
+                                                uid = firebaseUser.uid,
+                                                email = firebaseUser.email,
+                                                profilePictureUrl = firebaseUser.photoUrl.toString(),
+                                                username = "",
+
+                                            )
+                                            UserRepository.signUpUserIntoDatabase(newDatabaseUser)
+                                        }
+                                        navController.navigate("Splash") {
+                                            popUpTo(navController.graph.id) { inclusive = true }
+                                        }
                                     }
+
                                 }
                             } else {
                                 Log.w(

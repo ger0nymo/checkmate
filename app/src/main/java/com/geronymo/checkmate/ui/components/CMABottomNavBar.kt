@@ -17,13 +17,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import com.geronymo.checkmate.utils.enums.ScreenNameEnum
 
 @Composable
-fun BottomNavigation(currentScreen: String) {
+fun BottomNavigation(currentScreen: String, changeScreen: (ScreenNameEnum) -> Unit) {
     var currentSelected: String by remember { mutableStateOf(currentScreen) }
 
     val items = listOf(
-        BottomNavItem.Home,
+        BottomNavItem.Feeds,
         BottomNavItem.Add,
         BottomNavItem.Profile
     )
@@ -36,6 +38,7 @@ fun BottomNavigation(currentScreen: String) {
                 screen = item,
                 selectScreen = {
                     currentSelected = item.title
+                    changeScreen(item.screen)
                 },
                 selectedScreen = currentSelected
             )

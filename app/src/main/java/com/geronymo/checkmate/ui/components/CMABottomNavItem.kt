@@ -7,28 +7,33 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.geronymo.checkmate.R
+import com.geronymo.checkmate.utils.enums.ScreenNameEnum
 
 sealed class BottomNavItem(
     var title: String,
     var selectedIcon: Int,
-    var unselectedIcon: Int
+    var unselectedIcon: Int,
+    var screen: ScreenNameEnum
 ) {
-    object Home :
+    object Feeds :
         BottomNavItem(
-            "Home",
-            R.drawable.round_home_24,
-            R.drawable.outline_home_24
+            "Feeds",
+            R.drawable.baseline_feed_24,
+            R.drawable.outline_feed_24,
+            ScreenNameEnum.FEEDS
         )
     object Add :
         BottomNavItem(
-            "New todo",
-            R.drawable.round_add_box_24,
-            R.drawable.outline_add_box_24
+            "Search",
+            R.drawable.baseline_search_24,
+            R.drawable.baseline_search_24,
+            ScreenNameEnum.SEARCH
         )
     object Profile :
         BottomNavItem(
             "Profile",
             R.drawable.baseline_person_24,
-            R.drawable.baseline_person_outline_24
+            R.drawable.baseline_person_outline_24,
+            ScreenNameEnum.PROFILE
         )
 }
